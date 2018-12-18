@@ -189,124 +189,126 @@ def generalize() :
     # for l in list_out :
     #     l=l.split("\n")
     #     list_item.append(l[0])
+    if(len(sys.argv) != 3):
+        print('input an input file name and an outpute file name in the command line')
+    else:
+        infile =  sys.argv[1]
+        print ("Input file name: %s" % infile)
+        outfile = sys.argv[2]
+        print ("Output file name: %s" % outfile)
 
-    infile =  "tripData2013/trip_data_1/trip_data_1_replaced.csv"
-    print ("Input file name: %s" % infile)
-    outfile = "test.csv"
-    print ("Output file name: %s" % outfile)
-
-    out = open(outfile,'w')
-
-
-    i=0
-
-    # filefirst=open(os.path.expanduser("id_item_two_first_digit.p"),"rb")
-    # dico_id_item_tronc_first=pickle.load(filefirst)
-
-    # filelast=open(os.path.expanduser("id_item_two_last_digit.p"),"rb")
-    # dico_id_item_tronc_last=pickle.load(filelast)
-
-    # filepercentileqty=open(os.path.expanduser("percentile_qty.p"),"rb")
-    # percentile_qty=pickle.load(filepercentileqty)
-
-    # filepercentileprice=open(os.path.expanduser("percentile_price.p"),"rb")
-    # percentile_price=pickle.load(filepercentileprice)
-
-    # fileidItem=open(os.path.expanduser("list_id_item.p"),"rb")
-    # list_id_item=pickle.load(fileidItem)
-
-    # filedict_id_item_sell=open(os.path.expanduser("dict_id_item_sell.p"),"rb")
-    # dict_id_item_sell=pickle.load(filedict_id_item_sell)
-
-    # filedict_id_users_buy=open(os.path.expanduser("dict_id_users_buy.p"),"rb")
-    # dict_id_users_buy=pickle.load(filedict_id_users_buy)
-
-    for l in open(infile, "r").readlines():
-        r_ = l.replace('\r', '').replace('\n', '').replace(', ', ',').split(',')
-
-        r = [""] *  len(r_)
-        boolean_break=False
-        for ix, a in enumerate(r_):
-            if i<6 :
-                r[ix] = a
-                print("premiere boucle")
-                i=i+1
-            else :
-                if(ix==0): #id_user
-                    # r[ix] = hash_salt_id_user(a)
-                    r[ix] = random_hash_salt_id_user(a)
-                    # r[ix] = generalize_id_user(a)
+        out = open(outfile,'w')
 
 
-                elif(ix==1): # date
-                    # r[ix] = generalize_date(a)
-                    # r[ix] = differential_privacy_date(a, 7)
-                    r[ix]  =a
-                elif(ix==2): # hours
-                    # r[ix] = generalize_hours(a)
-                    r[ix]  =a
-                elif(ix==3): # id_item
-                    # r[ix] = generalize_id_item_first_digit(a,dico_id_item_tronc_first)
-                    # r[ix] = generalize_id_item_two_last_digit(a,dico_id_item_tronc_last)
-                    # if dict_id_item_sell[a] <=5 :
-                    #     print(a)
-                    #     boolean_break=True
+        i=0
 
-                    # r[ix]=differential_id_item(a,list_id_item)
-                    r[ix]  =a
+        # filefirst=open(os.path.expanduser("id_item_two_first_digit.p"),"rb")
+        # dico_id_item_tronc_first=pickle.load(filefirst)
+
+        # filelast=open(os.path.expanduser("id_item_two_last_digit.p"),"rb")
+        # dico_id_item_tronc_last=pickle.load(filelast)
+
+        # filepercentileqty=open(os.path.expanduser("percentile_qty.p"),"rb")
+        # percentile_qty=pickle.load(filepercentileqty)
+
+        # filepercentileprice=open(os.path.expanduser("percentile_price.p"),"rb")
+        # percentile_price=pickle.load(filepercentileprice)
+
+        # fileidItem=open(os.path.expanduser("list_id_item.p"),"rb")
+        # list_id_item=pickle.load(fileidItem)
+
+        # filedict_id_item_sell=open(os.path.expanduser("dict_id_item_sell.p"),"rb")
+        # dict_id_item_sell=pickle.load(filedict_id_item_sell)
+
+        # filedict_id_users_buy=open(os.path.expanduser("dict_id_users_buy.p"),"rb")
+        # dict_id_users_buy=pickle.load(filedict_id_users_buy)
+        fp = open(infile, "r")
+        out.write(fp.readline())
+        for line_number, l in enumerate(fp):
+            r_ = l.replace('\r', '').replace('\n', '').replace(', ', ',').split(',')
+            r = [""] *  len(r_)
+            boolean_break=False
+            for ix, a in enumerate(r_):
+                if i<6 :
+                    r[ix] = a
+                    print("premiere boucle")
+                    i=i+1
+                else :
+                    if(ix==0): #id_user
+                        # r[ix] = hash_salt_id_user(a)
+                        r[ix] = random_hash_salt_id_user(a)
+                        # r[ix] = generalize_id_user(a)
 
 
-                elif(ix==4): # price
-                    # r[ix] =generalize_price_percentile(a,percentile_price)
-                    # r[ix] = generalize_price(a)
-                    # r[ix] = differential_privacy_price(a)
-                    # r[ix]  =generalize_qty_price_to_2(a)
-                    r[ix]  =a
-                
-                elif(ix==5): # qty
+                    elif(ix==1): # date
+                        # r[ix] = generalize_date(a)
+                        # r[ix] = differential_privacy_date(a, 7)
+                        r[ix]  =a
+                    elif(ix==2): # hours
+                        # r[ix] = generalize_hours(a)
+                        r[ix]  =a
+                    elif(ix==3): # id_item
+                        # r[ix] = generalize_id_item_first_digit(a,dico_id_item_tronc_first)
+                        # r[ix] = generalize_id_item_two_last_digit(a,dico_id_item_tronc_last)
+                        # if dict_id_item_sell[a] <=5 :
+                        #     print(a)
+                        #     boolean_break=True
 
-                    r[ix] = generalize_date(a)
-                    # r[ix]  =a
-                elif(ix==6): # qty
+                        # r[ix]=differential_id_item(a,list_id_item)
+                        r[ix]  =a
 
+
+                    elif(ix==4): # price
+                        # r[ix] =generalize_price_percentile(a,percentile_price)
+                        # r[ix] = generalize_price(a)
+                        # r[ix] = differential_privacy_price(a)
+                        # r[ix]  =generalize_qty_price_to_2(a)
+                        r[ix]  =a
                     
-                    r[ix] = generalize_hours(a)
-                    # r[ix]  =a
-                elif(ix==7): # qty
+                    elif(ix==5): # qty
 
-                    # r[ix] =differential_qty_percentile(a,percentile_qty)
-                    # r[ix] =generalize_qty_percentile(a,percentile_qty)
-                    # r[ix] = differential_privacy_qty(a)
-                    # r[ix] = generalize_qty(a)
-                    # r[ix]  =generalize_qty_price_to_2(a)
+                        r[ix] = generalize_date(a)
+                        # r[ix]  =a
+                    elif(ix==6): # qty
 
-                    r[ix] = generalize_date(a)
-                    # r[ix]  =a
-                elif(ix==8): # qty
+                        
+                        r[ix] = generalize_hours(a)
+                        # r[ix]  =a
+                    elif(ix==7): # qty
 
-                    # r[ix] =differential_qty_percentile(a,percentile_qty)
-                    # r[ix] =generalize_qty_percentile(a,percentile_qty)
-                    # r[ix] = differential_privacy_qty(a)
-                    # r[ix] = generalize_qty(a)
-                    # r[ix]  =generalize_qty_price_to_2(a)
-                    
-                    r[ix] = generalize_hours(a)
-                    # r[ix]  =a    
-                else:
-                    r[ix]  =a
+                        # r[ix] =differential_qty_percentile(a,percentile_qty)
+                        # r[ix] =generalize_qty_percentile(a,percentile_qty)
+                        # r[ix] = differential_privacy_qty(a)
+                        # r[ix] = generalize_qty(a)
+                        # r[ix]  =generalize_qty_price_to_2(a)
 
-        # out.write(",".join(r))
-        # out.write("\n")
-        #out.write(["%s," % item  for item in r])
-        # print("boolean_break",boolean_break)
-        if boolean_break==False :
-            # print("jecris")
-            out.write(",".join(r))
-            out.write("\n")
-        # else :
-        #     input("pause")
-    out.close()
-    print("done!")
+                        r[ix] = generalize_date(a)
+                        # r[ix]  =a
+                    elif(ix==8): # qty
+
+                        # r[ix] =differential_qty_percentile(a,percentile_qty)
+                        # r[ix] =generalize_qty_percentile(a,percentile_qty)
+                        # r[ix] = differential_privacy_qty(a)
+                        # r[ix] = generalize_qty(a)
+                        # r[ix]  =generalize_qty_price_to_2(a)
+                        
+                        r[ix] = generalize_hours(a)
+                        # r[ix]  =a    
+                    else:
+                        r[ix]  =a
+
+            # out.write(",".join(r))
+            # out.write("\n")
+            #out.write(["%s," % item  for item in r])
+            # print("boolean_break",boolean_break)
+            if boolean_break==False :
+                # print("jecris")
+                out.write(",".join(r))
+                out.write("\n")
+            # else :
+            #     input("pause")
+        out.close()
+        print("done!")
 
 generalize()
 exit(0)
