@@ -8,41 +8,9 @@ import hashlib
 import time
 from datetime import datetime, timedelta
 
-const_average_price=3.503359
-const_ecart_type_price=77.519
-const_average_qty=12.021
-const_ecart_type_qty=46.321
-
-
 """
 fonction de generalisation
 """
-def generalize_id_user(a):
-    b="".join(["L",a,"D"])
-    return b
-def hash_id_user(a):
-    b=hashlib.md5(a.encode()).hexdigest()
-    b="".join(["L",b,"D"])
-    return b
-
-def hash_salt_id_user(a):
-    salt=str(random.randint(1,3500000000))
-    s=a+salt
-    b=hashlib.md5(s.encode()).hexdigest()
-    b="".join(["L",b,"D"])
-    return b
-
-def random_hash_salt_id_user(a):
-    rand=random.randint(1,20)
-    b=a
-    if rand == 20 :
-        salt=str(random.randint(1,3500000000))
-        s=a+salt
-        b=hashlib.md5(s.encode()).hexdigest()
-        b="".join(["L",b,"D"])
-    return b
-
-
 
 # generalise a la semaine
 def generalize_date(a):
@@ -61,84 +29,19 @@ def generalize_date(a):
 def generalize_hours(a):
     hours=a.split(":")
     a=":".join([hours[0],"00:00"])
-    # a="12:12"
     return a
 
-
-def generalize_id_item_first_digit(a,dico_id_item_tronc):
-    letters = list(a)
-    first_digit=letters[- len(letters)+2:]
-    first_digit="".join(first_digit)
-    # try si le dernier char est un int
-    a=dico_id_item_tronc[first_digit]
+# generalise les coordonnées gps
+def generalize_coordinates(a, decimals, line_number, line):
+    try :
+        a = str(round(float(a), decimals))
+    except ValueError:
+        print(line)
+        print(line_number)
     return a
-
-def generalize_id_item_two_last_digit(a,dico_id_item_tronc):
-    # print(a)
-    letters = list(a)
-    first_digit=letters[0:len(letters)-2]
-    first_digit="".join(first_digit)
-    a=dico_id_item_tronc[first_digit]
-    # print(a,"\n")
-    return a
-
-
-def generalize_price(a):
-    a = float(a)
-    if a < const_average_price + const_ecart_type_price :
-        b=float(round(a))
-    else :
-        b = float(50*round(a/50))
-    b=str(b)
-    return b
-
-def generalize_price_percentile(a,percentile_price):
-    a = float(a)
-    i=0
-    while a > percentile_price[i] and i<len(percentile_price)-1:
-        i+=1
-    b=percentile_price[i]
-    # print(a," : ",i," : " ,b)
-    b=str(b)
-    return b
-
-def generalize_qty(a):
-    a = float(a)
-    if a < const_average_qty + const_ecart_type_qty :
-        b=int(3*round(a/3)+1)
-    else :
-        b = int(25*round(a/25))
-    b = str(b)
-    return b
-def generalize_qty_price_to_2(a):
-
-    b = str(2)
-    return b
-
-def generalize_qty_percentile(a,percentile_qty):
-    a = float(a)
-    i=0
-    while a > percentile_qty[i] and i<len(percentile_qty)-1:
-        i+=1
-    b=percentile_qty[i]
-    # print(a," : ",i," : " ,b)
-    b=str(b)
-    return b
-
 """
 fonction de bruit
 """
-# probleme de mauvaise valeurs font planter l'algo de metric.py
-
-def differential_id_item(a,list_id_item):
-    rand=random.randint(1,20)
-    b=a
-    if rand==1 :
-
-        r=random.randint(1,len(list_id_item))
-        b=list_id_item[r-1]
-
-    return b
 
 def differential_privacy_date(a, noise_range):
     date=a.split("-")
@@ -148,47 +51,8 @@ def differential_privacy_date(a, noise_range):
     a=str(new_date_formated.year)+'-'+str('{0:02}'.format(new_date_formated.month))+'-'+str('{0:02}'.format(new_date_formated.day))
     return a 
 
-def differential_privacy_price(a):
-    a = float(a)
-    noise=numpy.random.laplace(0,const_ecart_type_price/4)
-    if a +noise > 0 :
-        a+=noise
-    a= str(a)
-    return a
-
-def differential_privacy_qty(a):
-    a = float(a)
-    noise=numpy.random.laplace(0,const_ecart_type_qty/4)
-    if a +noise > 0 :
-        a+=noise
-    a= str(int(round(a)))
-    return a
-
-# l'idee de cette fonction est que pour les petites valeurs [0-10] on les tire aleatoirement
-def differential_qty_percentile(a,percentile_qty):
-    a = float(a)
-    if a<10 :
-        b = random.randint(1,9)
-    else :
-        i=0
-        while a > percentile_qty[i] and i<len(percentile_qty)-1:
-            i+=1
-        b=percentile_qty[i]
-        # print(a," : ",i," : " ,b)
-    b=str(b)
-    return b
-
-
-
-
 
 def generalize() :
-    # permet de recuperer item qui ne sont pas bcp vendu
-    # sert pour generalisation_item
-    # list_item=[]
-    # for l in list_out :
-    #     l=l.split("\n")
-    #     list_item.append(l[0])
     if(len(sys.argv) != 3):
         print('input an input file name and an outpute file name in the command line')
     else:
@@ -198,30 +62,7 @@ def generalize() :
         print ("Output file name: %s" % outfile)
 
         out = open(outfile,'w')
-
-
         i=0
-
-        # filefirst=open(os.path.expanduser("id_item_two_first_digit.p"),"rb")
-        # dico_id_item_tronc_first=pickle.load(filefirst)
-
-        # filelast=open(os.path.expanduser("id_item_two_last_digit.p"),"rb")
-        # dico_id_item_tronc_last=pickle.load(filelast)
-
-        # filepercentileqty=open(os.path.expanduser("percentile_qty.p"),"rb")
-        # percentile_qty=pickle.load(filepercentileqty)
-
-        # filepercentileprice=open(os.path.expanduser("percentile_price.p"),"rb")
-        # percentile_price=pickle.load(filepercentileprice)
-
-        # fileidItem=open(os.path.expanduser("list_id_item.p"),"rb")
-        # list_id_item=pickle.load(fileidItem)
-
-        # filedict_id_item_sell=open(os.path.expanduser("dict_id_item_sell.p"),"rb")
-        # dict_id_item_sell=pickle.load(filedict_id_item_sell)
-
-        # filedict_id_users_buy=open(os.path.expanduser("dict_id_users_buy.p"),"rb")
-        # dict_id_users_buy=pickle.load(filedict_id_users_buy)
         fp = open(infile, "r")
         out.write(fp.readline())
         for line_number, l in enumerate(fp):
@@ -234,73 +75,45 @@ def generalize() :
                     print("premiere boucle")
                     i=i+1
                 else :
-                    if(ix==0): #id_user
-                        # r[ix] = hash_salt_id_user(a)
-                        r[ix] = random_hash_salt_id_user(a)
-                        # r[ix] = generalize_id_user(a)
-
-
-                    elif(ix==1): # date
-                        # r[ix] = generalize_date(a)
-                        # r[ix] = differential_privacy_date(a, 7)
-                        r[ix]  =a
-                    elif(ix==2): # hours
-                        # r[ix] = generalize_hours(a)
-                        r[ix]  =a
-                    elif(ix==3): # id_item
-                        # r[ix] = generalize_id_item_first_digit(a,dico_id_item_tronc_first)
-                        # r[ix] = generalize_id_item_two_last_digit(a,dico_id_item_tronc_last)
-                        # if dict_id_item_sell[a] <=5 :
-                        #     print(a)
-                        #     boolean_break=True
-
-                        # r[ix]=differential_id_item(a,list_id_item)
-                        r[ix]  =a
-
-
-                    elif(ix==4): # price
-                        # r[ix] =generalize_price_percentile(a,percentile_price)
-                        # r[ix] = generalize_price(a)
-                        # r[ix] = differential_privacy_price(a)
-                        # r[ix]  =generalize_qty_price_to_2(a)
-                        r[ix]  =a
-                    
-                    elif(ix==5): # qty
-
+                    if(ix==0): # medallion
+                        r[ix] = a
+                    elif(ix==1): # hack_license
+                        r[ix] = a
+                    elif(ix==2): # vendor_id
+                        r[ix] = a
+                    elif(ix==3): # rate_code
+                        r[ix] = a
+                    elif(ix==4): # stor_and_fwd_flag
+                        r[ix] = a
+                    elif(ix==5): # pickup_date
                         r[ix] = generalize_date(a)
-                        # r[ix]  =a
-                    elif(ix==6): # qty
-
-                        
+                    elif(ix==6): # pickup_hour
                         r[ix] = generalize_hours(a)
-                        # r[ix]  =a
-                    elif(ix==7): # qty
-
-                        # r[ix] =differential_qty_percentile(a,percentile_qty)
-                        # r[ix] =generalize_qty_percentile(a,percentile_qty)
-                        # r[ix] = differential_privacy_qty(a)
-                        # r[ix] = generalize_qty(a)
-                        # r[ix]  =generalize_qty_price_to_2(a)
-
+                    elif(ix==7): # dropoff_date
                         r[ix] = generalize_date(a)
-                        # r[ix]  =a
-                    elif(ix==8): # qty
-
-                        # r[ix] =differential_qty_percentile(a,percentile_qty)
-                        # r[ix] =generalize_qty_percentile(a,percentile_qty)
-                        # r[ix] = differential_privacy_qty(a)
-                        # r[ix] = generalize_qty(a)
-                        # r[ix]  =generalize_qty_price_to_2(a)
-                        
+                    elif(ix==8): # dropoff_hour
                         r[ix] = generalize_hours(a)
-                        # r[ix]  =a    
+                    elif(ix==9): # passenger_count
+                        r[ix] = a
+                    elif(ix==10): # trip_time_in_secs
+                        r[ix] = a
+                    elif(ix==11): # trip_distance
+                        r[ix] = a
+                    elif(ix==12): # pickup_longitude
+                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        # r[ix] = a
+                    elif(ix==13): # pickup_latitude
+                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        # r[ix] = a
+                    elif(ix==14): # dropoff_longitude
+                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        # r[ix] = a
+                    elif(ix==15): # dropoff_latitude
+                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        # r[ix] = a
                     else:
                         r[ix]  =a
 
-            # out.write(",".join(r))
-            # out.write("\n")
-            #out.write(["%s," % item  for item in r])
-            # print("boolean_break",boolean_break)
             if boolean_break==False :
                 # print("jecris")
                 out.write(",".join(r))

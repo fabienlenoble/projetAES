@@ -5,7 +5,10 @@ Once this is done, we anonymize it and try to evaluate how good we did by puttin
 We found a dataset of New York taxi trips from 2013 which will be what we will be working on at first.
 
 ## Start
-add your data to tripData2013 in folders such as trip_data_1.csv which will contain the trip_data_1.csv file itself
-run ```python generalize.py <input filepath>``` to anonymize the data
-run ```python modify_csv.py <input_filepath> <output_filepath>``` to modify to reformat the date fields in two separate dates in your csv file
-run ```python read_first_lines.py <input filepath>``` to read the first three lines of the file given in the command line
+Add your data to tripData2013 in folders such as trip_data_1.csv which will contain the trip_data_1.csv file itself
+
+Run ```python generalize.py <input filepath>``` to anonymize the data
+
+Run ```python modify_csv.py <input_filepath> <output_filepath>``` to modify to reformat the date fields in two separate dates in your csv file
+
+Run ```python read_first_lines.py <input filepath> <x>``` to read the first x lines of the file given in the command line
