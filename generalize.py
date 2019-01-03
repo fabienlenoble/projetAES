@@ -32,6 +32,9 @@ def generalize_hours(a):
 # generalise les coordonnées gps
 def generalize_coordinates(a, decimals, line_number, line):
     try :
+        a = float(a)
+        if a>400:
+            a = a - 400
         a = str(round(float(a), decimals))
     except ValueError:
         print(line)
