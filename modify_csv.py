@@ -3,8 +3,8 @@ import sys
 def generalize_coordinates(a, decimals, line_number, line):
     try :
         a = float(a)
-        if a>400:
-            a = a/10
+        if abs(a)>180:
+            a = 0
     except ValueError:
         print(line)
         print(line_number)
