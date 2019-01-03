@@ -17,11 +17,9 @@ def generalize_date(a):
     date=a.split("-")
     
     if(int(date[2])!=28):
-
         date[2]=int(date[2])-int(date[2])%7+1
         date[2]='{0:02}'.format(date[2])
         date[2]=str(date[2])
-
     a="-".join(date)
     return a
 
@@ -65,8 +63,8 @@ def generalize() :
         i=0
         fp = open(infile, "r")
         out.write(fp.readline())
-        for line_number, l in enumerate(fp):
-            r_ = l.replace('\r', '').replace('\n', '').replace(', ', ',').split(',')
+        for line_number, line in enumerate(fp):
+            r_ = line.replace('\r', '').replace('\n', '').replace(', ', ',').split(',')
             r = [""] *  len(r_)
             boolean_break=False
             for ix, a in enumerate(r_):
@@ -100,26 +98,23 @@ def generalize() :
                     elif(ix==11): # trip_distance
                         r[ix] = a
                     elif(ix==12): # pickup_longitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        r[ix] = generalize_coordinates(a, 3, line_number, line)
                         # r[ix] = a
                     elif(ix==13): # pickup_latitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        r[ix] = generalize_coordinates(a, 3, line_number, line)
                         # r[ix] = a
                     elif(ix==14): # dropoff_longitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        r[ix] = generalize_coordinates(a, 3, line_number, line)
                         # r[ix] = a
                     elif(ix==15): # dropoff_latitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, l)
+                        r[ix] = generalize_coordinates(a, 3, line_number, line)
                         # r[ix] = a
                     else:
                         r[ix]  =a
 
             if boolean_break==False :
-                # print("jecris")
                 out.write(",".join(r))
                 out.write("\n")
-            # else :
-            #     input("pause")
         out.close()
         print("done!")
 
