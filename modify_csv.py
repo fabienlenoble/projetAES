@@ -6,6 +6,7 @@ def generalize_coordinates(a, decimals, line_number, line):
         if abs(a)>180:
             a = 0
     except ValueError:
+        a = 0
         print(line)
         print(line_number)
     return str(a)
