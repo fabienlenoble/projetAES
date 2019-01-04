@@ -107,16 +107,16 @@ def generalize() :
                     elif(ix==11): # trip_distance
                         r[ix] = a
                     elif(ix==12): # pickup_longitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, line)
+                        r[ix] = generalize_coordinates(a, 2, line_number, line)
                         # r[ix] = a
                     elif(ix==13): # pickup_latitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, line)
+                        r[ix] = generalize_coordinates(a, 2, line_number, line)
                         # r[ix] = a
                     elif(ix==14): # dropoff_longitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, line)
+                        r[ix] = generalize_coordinates(a, 2, line_number, line)
                         # r[ix] = a
                     elif(ix==15): # dropoff_latitude
-                        r[ix] = generalize_coordinates(a, 3, line_number, line)
+                        r[ix] = generalize_coordinates(a, 2, line_number, line)
                         # r[ix] = a
                     else:
                         r[ix]  =a
