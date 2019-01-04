@@ -30,6 +30,11 @@ def generalize_hours(a):
     a=":".join([hours[0],"00:00"])
     return a
 
+# generalise à la minute
+def generalize_trip_time(a):
+    a=str(int(a)-int(a)%60)
+    return a
+
 # generalise les coordonnées gps
 def generalize_coordinates(a, decimals, line_number, line):
     try :
@@ -98,7 +103,7 @@ def generalize() :
                     elif(ix==9): # passenger_count
                         r[ix] = a
                     elif(ix==10): # trip_time_in_secs
-                        r[ix] = a
+                        r[ix] = generalize_trip_time(a)
                     elif(ix==11): # trip_distance
                         r[ix] = a
                     elif(ix==12): # pickup_longitude
