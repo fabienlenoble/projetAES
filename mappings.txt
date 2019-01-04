@@ -173,7 +173,8 @@ POST _reindex
     "index": "tmp-taxi-raw-data"
   },
   "dest": {
-    "index": "taxi-raw-data"
+    "index": "taxi-raw-data",
+    "version_type": "external"
   }
 }
 
